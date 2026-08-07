@@ -15,8 +15,8 @@ Submitted reports live in a Reports tab, gated by a 4-digit PIN, with filter chi
 
 ## Where the data lives
 
-- **Reports themselves: jsonbin.io**, a free hosted JSON key-value store. The app does a `fetch` GET/PUT against `https://api.jsonbin.io/v3/b/<binId>/latest` on submit and on report list load. Default `binId` and `apiKey` (an `X-Master-Key`) are hardcoded in the JS as `DEFAULTS`.
-- **App settings (bin ID, API key, notify email, EmailJS creds, reports PIN, Google Maps key): browser `localStorage`**, key `ncems_ir_v2`, JSON blob. Falls back to `DEFAULTS` if empty or unparseable. This means settings are per-device — a crew member changing the PIN or bin ID on their phone doesn't change it anywhere else.
+- **Reports themselves: Doug's Cloudflare Worker + KV** (as of v2.9, 2026-08-07 — replaced Derek's jsonbin.io). GET/PUT against `https://ncems-api.d-boyce.workers.dev/bin/incident-reports`. Reads are open; writes require the `X-App-Key` header. The Worker URL and app key defaults are hardcoded in the JS as `DEFAULTS` (`workerUrl`, `appKey`). See `CLOUDFLARE_SETUP.md` in the parent Github folder for the full Worker/KV setup.
+- **App settings (Worker URL, app key, notify email, EmailJS creds, reports PIN, Google Maps key): browser `localStorage`**, key `ncems_ir_v2`, JSON blob. Falls back to `DEFAULTS` if empty or unparseable. Settings are per-device. Note: devices with settings saved under the old jsonbin version stored `binId`/`apiKey` keys — the new code ignores those and falls back to the Worker defaults, so no cleanup is needed.
 - Default reports-access PIN is `1234`. Default notify email is `d.langdon@northcountryems.org`.
 - EmailJS fields exist for optional email notifications on submit, but ship blank — email alerts are off unless someone fills in a service/template/public key.
 
@@ -30,6 +30,6 @@ Submitted reports live in a Reports tab, gated by a 4-digit PIN, with filter chi
 ## Anything odd
 
 - **README.md is empty** (literally a blank file with one space) — no doc existed before this handoff.
-- All persistence is client-side plus a third-party free JSON store (jsonbin.io) — there's no real backend, no auth beyond a 4-digit PIN, and the jsonbin API key is shipped in the page source. Treat this the same as WAMBOchecker/apps: adequate for a small department, not real security, and **not HIPAA/PHI-safe**.
-- Settings changes are local-only per device, same caveat as WAMBOchecker's admin mode — there's no push-to-all-devices mechanism, so if someone edits the bin ID or PIN on one phone, every other phone keeps talking to the old bin/PIN until manually updated.
+- The app key ships in the page source, same pattern as the old jsonbin key — but unlike the old jsonbin master key it only allows writes to bins on Doug's Worker, and it can be rotated in seconds (set a new `APP_KEY` secret on the Worker, update `DEFAULTS.appKey`, redeploy). Still: no real auth beyond a 4-digit PIN, **not HIPAA/PHI-safe**.
+- Settings changes are local-only per device, same caveat as WAMBOchecker's admin mode — there's no push-to-all-devices mechanism, so if someone edits the Worker URL or PIN on one phone, every other phone keeps its own values until manually updated.
 - Vehicle Incident has its own separate submit/export path (`submitVehicleReport()`, `exportVehJSON()`) rather than funneling through the same flow as the other three incident types — worth knowing if you're modifying the common report pipeline, since Vehicle may not pick up changes made to the others.
