@@ -1,1 +1,62 @@
- 
+# NCEMS On-Duty Incident Report
+
+On-duty incident reporting for North Country EMS and Clark Fire District 13: injury or illness, biological exposure, chemical exposure, and vehicle incidents.
+
+**Version 3.0**
+
+## Links
+
+- Live: [https://reports.northcountryems.org/](https://reports.northcountryems.org/)
+- Repo: [https://github.com/emaildougb/onduty-incident-report](https://github.com/emaildougb/onduty-incident-report)
+- Upload: [https://github.com/emaildougb/onduty-incident-report/upload/main](https://github.com/emaildougb/onduty-incident-report/upload/main)
+- Storage (Cloudflare Worker): [https://dash.cloudflare.com/](https://dash.cloudflare.com/) > Workers > `ncems-api`
+
+## Files (upload ALL of these)
+
+- `index.html`: the whole app
+- `README.md`: this file
+- `HANDOFF.md`: notes for whoever works on it next
+- `worker.js`: NOT uploaded to GitHub. This is pasted into the Cloudflare Worker (see WORKER_SETUP.md)
+
+## Page layout
+
+**Home:** pick the incident type (Injury, Biological, Chemical, Vehicle).
+**Report form:** the questions for that type, then Submit. Crews never sign in.
+**Reports tab:** Sign in with Microsoft. Only the chiefs on the Worker's ADMINS list can see reports. View, mark reviewed, close, add BC and HSO comments, export PDF.
+**Settings tab:** shows after sign-in. Worker address and a connection test.
+
+## Who can see reports
+
+The Worker checks the Microsoft sign-in and only answers for these emails (change with the `ADMINS` variable in Cloudflare):
+Doug Boyce, Derek Langdon, Dennis Madler, Bryce Shirley, Chuck Andrus.
+
+## Where the data lives
+
+- Cloudflare Worker `ncems-api.d-boyce.workers.dev`, Doug's Cloudflare account, KV storage.
+- `POST /bin/incident-reports/report`: crews add one report. They can't read, change or delete. Limit 10 reports per device per hour.
+- `GET` and `PUT /bin/incident-reports`: chiefs only, with a Microsoft sign-in token.
+- A backup copy is saved once a day before any chief edit and kept 30 days.
+
+## Microsoft sign-in setup
+
+1. Uses the existing Entra app "NCEMS Grounds Tracker" (client id `254c214f-bfe2-4ebb-9294-99815e167ab0`)
+2. Entra > App registrations > NCEMS Grounds Tracker > Authentication > Single-page application > add `https://reports.northcountryems.org/`
+3. Save. No new permissions needed (it only asks for sign-in)
+
+## Changelog
+
+### v3.0
+- Security fix from the October 2026 audit
+- Reports screen now uses Microsoft sign-in instead of the 4 digit PIN
+- Crews submit with "add one report" only. The public write key is gone from the code
+- Everything shown in the reports list, detail view and PDF is cleaned first, so planted code can't run
+- Needs the new Cloudflare Worker (`worker.js`) in place at the same time
+
+### v2.9
+- Moved storage from jsonbin.io to Doug's Cloudflare Worker
+
+## Notes
+
+- iOS home-screen caches hard. After this update, crews should delete and re-add the icon, or an old copy may fail to submit
+- Hosted at reports.northcountryems.org (CNAME to emaildougb.github.io)
+- Not for patient information. Employee incident data only, chiefs-only access
