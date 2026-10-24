@@ -1,11 +1,11 @@
-# NCEMS On-Duty Incident Report
+# NCEMS During Duty Incident Report
 
 Live: https://reports.northcountryems.org/
 Upload: https://github.com/emaildougb/onduty-incident-report/upload/main
 
 On-duty incident reporting for North Country EMS, Clark Fire District 13 and the Volcano Rescue Team (VRT): injury or illness, biological exposure, chemical exposure, and vehicle incidents.
 
-**Version 3.2** (10/23/2026)
+**Version 3.3** (10/24/2026)
 
 ## Links
 
@@ -19,14 +19,17 @@ On-duty incident reporting for North Country EMS, Clark Fire District 13 and the
 - `index.html`: the whole app
 - `README.md`: this file
 - `HANDOFF.md`: notes for whoever works on it next
+- `logo.png`, `apple-touch-icon.png`, `icon-512.png`, `manifest.json`: logo and icons (new in 3.3)
 - `worker.js`: NOT uploaded to GitHub. This is pasted into the Cloudflare Worker (see WORKER_SETUP.md)
 
 ## Page layout
 
-**Home:** pick the agency (NCEMS, FD13 or VRT), then the incident type (Injury, Biological, Chemical, Vehicle).
-**Report form:** the questions for that type, then Submit. Crews never sign in.
-**Reports tab:** Sign in with Microsoft. Only the chiefs on the Worker's ADMINS list can see reports. View, mark reviewed, close, add BC and HSO comments, export PDF.
-**Settings tab:** shows after sign-in. Worker address and a connection test.
+**Top bar:** the standard NCEMS bar (same as CG Staff). Home button goes to the NCEMS Hub. The i button opens details, and the CG Staff section in there holds Reports (and Settings once signed in).
+**Step 1:** pick the agency (NCEMS, FD13 or VRT). No bottom bar on this page.
+**Step 2:** pick the type: Injury / Illness, Biological Exposure, Chemical Exposure or Vehicle Incident. Vehicle goes to the vehicle report; the others ask the hospitalization question, then open the form with that type already picked.
+**Bottom bar (after step 1):** Back (one page at a time) and Start Over. Crews never sign in.
+**Reports (under the i):** Sign in with Microsoft. Only the chiefs on the Worker's ADMINS list can see reports. View, mark reviewed, close, add BC and HSO comments, export PDF.
+**Settings (under the i, after sign in):** Worker address and a connection test.
 
 ## Who can see reports
 
@@ -47,6 +50,8 @@ Doug Boyce, Derek Langdon, Dennis Madler, Bryce Shirley, Chuck Andrus.
 3. Save. No new permissions needed (it only asks for sign-in)
 
 ## Changelog
+
+- **3.3** (10/24/2026): Renamed to During Duty Incident Report. Standard NCEMS top bar like CG Staff (home to the Hub, logo, i button). Tab icon added (apple-touch-icon.png, icon-512.png, manifest.json, logo.png; the browser tab showed a blank globe before). New order: agency, then type of incident (vehicle is now one of the types), then the questions. No bottom bar on the first page; after that the bar is Back and Start Over. Reports and Settings moved under the i (CG Staff section). Haptics on taps. iPhone status bar set to default so the clock shows on the white bar
 
 ### v3.2
 - Step 1 now has a third agency button, VRT, next to NCEMS and FD13 (orange, so it stands out from the other two)
