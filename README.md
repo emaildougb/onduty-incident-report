@@ -1,8 +1,11 @@
 # NCEMS On-Duty Incident Report
 
-On-duty incident reporting for North Country EMS and Clark Fire District 13: injury or illness, biological exposure, chemical exposure, and vehicle incidents.
+Live: https://reports.northcountryems.org/
+Upload: https://github.com/emaildougb/onduty-incident-report/upload/main
 
-**Version 3.0**
+On-duty incident reporting for North Country EMS, Clark Fire District 13 and the Volcano Rescue Team (VRT): injury or illness, biological exposure, chemical exposure, and vehicle incidents.
+
+**Version 3.2** (10/23/2026)
 
 ## Links
 
@@ -20,7 +23,7 @@ On-duty incident reporting for North Country EMS and Clark Fire District 13: inj
 
 ## Page layout
 
-**Home:** pick the incident type (Injury, Biological, Chemical, Vehicle).
+**Home:** pick the agency (NCEMS, FD13 or VRT), then the incident type (Injury, Biological, Chemical, Vehicle).
 **Report form:** the questions for that type, then Submit. Crews never sign in.
 **Reports tab:** Sign in with Microsoft. Only the chiefs on the Worker's ADMINS list can see reports. View, mark reviewed, close, add BC and HSO comments, export PDF.
 **Settings tab:** shows after sign-in. Worker address and a connection test.
@@ -44,6 +47,17 @@ Doug Boyce, Derek Langdon, Dennis Madler, Bryce Shirley, Chuck Andrus.
 3. Save. No new permissions needed (it only asks for sign-in)
 
 ## Changelog
+
+### v3.2
+- Step 1 now has a third agency button, VRT, next to NCEMS and FD13 (orange, so it stands out from the other two)
+- VRT reports get their own reference numbers: VRT-YYYYMMDD-#### and VRT-VEH-YYYYMMDD-#### for vehicle incidents
+- VRT contact list on the call screens: Chief Shirley and BC Boyce (VRT Incident Commander) up top, then DC Andrus, BC Langdon, BC Madler
+- Agency shows as VRT on the report, the chiefs' list, the detail view and the PDF
+- Version line in Settings fixed (it still said 2.9)
+- No Worker change expected (the app sends agency as plain text). Send one test VRT report after uploading to confirm the Worker saves it
+
+### v3.1
+- New phone icon (10/17)
 
 ### v3.0
 - Security fix from the October 2026 audit
