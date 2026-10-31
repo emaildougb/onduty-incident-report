@@ -5,7 +5,7 @@ Upload: https://github.com/emaildougb/onduty-incident-report/upload/main
 
 On-duty incident reporting for North Country EMS, Clark Fire District 13 and the Volcano Rescue Team (VRT): injury or illness, biological exposure, chemical exposure, and vehicle incidents.
 
-**Version 4.1** (10/31/2026)
+**Version 4.2** (10/31/2026)
 
 ## Links
 
@@ -61,6 +61,8 @@ Doug Boyce, Derek Langdon, Dennis Madler, Bryce Shirley, Chuck Andrus.
 3. Save. No new permissions needed (it only asks for sign-in)
 
 ## Changelog
+
+- **4.2** (10/31/2026): VRT list shows BC Boyce as Battalion Chief (was VRT Incident Commander). Closing a report now shows. Before, Close saved the report as closed but it stayed in the list looking the same. The Reports list opens on Open (new and reviewed); filters are Open, New, Closed, All and the four types. A closed report has Reopen instead of Close. A message confirms Closed or Reviewed, and if the save fails it says why (no connection, or the account can't change reports) instead of doing nothing
 
 - **4.1** (10/31/2026): VRT list now Chief Shirley first, then BC Boyce (VRT IC), plus the on duty BC with the same "Which BC is on duty today?" pick as NCEMS and FD13. Agency switch colors: NCEMS green, FD13 red, VRT blue. "Throw it away" renamed "Delete this unfinished report"
 
