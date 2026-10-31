@@ -5,7 +5,7 @@ Upload: https://github.com/emaildougb/onduty-incident-report/upload/main
 
 On-duty incident reporting for North Country EMS, Clark Fire District 13 and the Volcano Rescue Team (VRT): injury or illness, biological exposure, chemical exposure, and vehicle incidents.
 
-**Version 4.0** (10/31/2026)
+**Version 4.1** (10/31/2026)
 
 ## Links
 
@@ -25,7 +25,7 @@ On-duty incident reporting for North Country EMS, Clark Fire District 13 and the
 ## Page layout
 
 **Top bar:** the standard NCEMS bar. Home goes to the NCEMS Hub on the start screen; on every other screen it is a Back button. The i button holds Reports and Settings (CG Staff section).
-**Start:** agency switch (NCEMS, FD13, VRT), a box showing who gets the report (FD13: Chief Shirley as DICO, DC Andrus and the on duty BC; NCEMS: the on duty BC; VRT: BC Boyce and Chief Shirley), "Which BC is on duty today?" (remembered on the phone until 07:30 the next morning; Not sure sends to all three BCs), the four incident types each with a "What counts?" dropdown, and an unfinished report to resume.
+**Start:** agency switch (NCEMS, FD13, VRT), a box showing who gets the report (FD13: Chief Shirley as DICO, DC Andrus and the on duty BC; NCEMS: the on duty BC; VRT: Chief Shirley, BC Boyce and the on duty BC), "Which BC is on duty today?" (remembered on the phone until 07:30 the next morning; Not sure sends to all three BCs; shown for every agency), the four incident types each with a "What counts?" dropdown, and an unfinished report to resume.
 **Injury, biological, chemical:** hospital question (Yes shows who to call), then four steps with a progress bar and Back / Next at the bottom: when and where, the type's questions, what happened, review and send.
 **Vehicle:** at the scene card (do not leave the scene, call law enforcement, notify the on duty BC, Policy 327.3), quick questions with the severity bar, the details, review and send.
 **Receipt:** reference number with Copy, who has it (emailed or call them), what happens now (FD13 exposures: get with the DICO), save a PDF copy.
@@ -40,7 +40,7 @@ On-duty incident reporting for North Country EMS, Clark Fire District 13 and the
 ## No signal and drafts (new in 4.0)
 
 - If the send fails for lack of signal, the report waits on the phone (localStorage `ir_queue`) and sends on its own when the phone is back online or every minute while the app is open
-- Unfinished reports save on the phone as you go and are thrown away after 4 hours, since crews share agency phones. "Throw it away" on the start screen clears one sooner
+- Unfinished reports save on the phone as you go and are thrown away after 4 hours, since crews share agency phones. "Delete this unfinished report" on the start screen clears one sooner
 
 ## Who can see reports
 
@@ -61,6 +61,8 @@ Doug Boyce, Derek Langdon, Dennis Madler, Bryce Shirley, Chuck Andrus.
 3. Save. No new permissions needed (it only asks for sign-in)
 
 ## Changelog
+
+- **4.1** (10/31/2026): VRT list now Chief Shirley first, then BC Boyce (VRT IC), plus the on duty BC with the same "Which BC is on duty today?" pick as NCEMS and FD13. Agency switch colors: NCEMS green, FD13 red, VRT blue. "Throw it away" renamed "Delete this unfinished report"
 
 - **4.0** (10/31/2026): Makeover from Doug's mockups (Design canvas https://claude.ai/artifact/C5P6avzhcf2VQecELw5Ngg). Open Shifts look (green, system font, sentence case). Intro splash removed. One start screen with the agency switch, who gets it, the on duty BC pick and "What counts?" dropdowns. Four short steps with a progress bar instead of one long page. The checkboxes for body part, type of injury and activity are now dropdowns in sections, with Left / Right / Both for arms and legs and Add another body part. Small picks (route, type, vehicle details) are tap chips. Vehicle opens with the at the scene card and Policy 327.3. Review screen with Edit per section. New receipt; FD13 exposures say to get with the DICO, who walks them through it (ED, clinic or wait). Emails to the people on the list. Sends later with no signal. Drafts for 4 hours. Report data keeps the same fields, plus unit, hospitalQuestion, notified and appVersion, so the chiefs' list, detail view and PDF work as before
 

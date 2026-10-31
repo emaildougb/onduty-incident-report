@@ -109,6 +109,8 @@ h3.sm{font-size:18px;font-weight:800}
 .seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;background:#fff;border:1px solid var(--line);border-radius:10px;padding:4px}
 .seg button{height:44px;border:0;border-radius:7px;background:transparent;font-size:15px;font-weight:600;cursor:pointer}
 .seg button[aria-pressed="true"],.seg button[aria-checked="true"]{background:var(--g);color:#fff;font-weight:700}
+#ag-seg button[data-ag="FD13"][aria-pressed="true"]{background:#c0392b}
+#ag-seg button[data-ag="VRT"][aria-pressed="true"]{background:#1a5a8a}
 
 /* yes / no rows */
 .qlist{background:#fff;border:1px solid var(--line);border-radius:10px}
@@ -312,7 +314,7 @@ h3.sm{font-size:18px;font-weight:800}
     <section id="draft-wrap" hidden aria-labelledby="draft-h" style="display:flex;flex-direction:column;gap:8px">
       <h2 id="draft-h" style="font-size:15px;font-weight:700;color:var(--ink2)">Not finished</h2>
       <div class="draft"><div class="t"><b id="draft-t"></b><small id="draft-s"></small></div><button class="link" onclick="resumeDraft()">Resume</button></div>
-      <button class="link" style="align-self:flex-start;color:var(--ink2);font-weight:600" onclick="discardDraft()">Throw it away</button>
+      <button class="link" style="align-self:flex-start;color:var(--ink2);font-weight:600" onclick="discardDraft()">Delete this unfinished report</button>
     </section>
 
     <p class="note">For staff incidents only. No patient information. Only the chiefs can read what you send.</p>
@@ -605,7 +607,7 @@ h3.sm{font-size:18px;font-weight:800}
 <div class="confirm-box" id="conf-box"><div style="font-size:16px;font-weight:800;margin-bottom:7px">Close this report?</div><div style="font-size:15px;color:var(--ink2);margin-bottom:14px;line-height:1.4">It stays in the system, marked closed. You can reopen it anytime.</div><button class="btn-primary" onclick="confirmClose()" style="margin-bottom:8px">Yes, close it</button><button class="btn-outline" onclick="cancelConf()">Cancel</button></div>
 <script>
 /* ===== During Duty Incident Report 4.0 (10/31/2026): crew side rebuilt from the makeover mockups ===== */
-var VERSION = '4.0';
+var VERSION = '4.1';
 var DEFAULTS = { workerUrl: 'https://ncems-api.d-boyce.workers.dev/bin/incident-reports' };
 function cfg() { try { return Object.assign({}, DEFAULTS, JSON.parse(localStorage.getItem('ncems_ir_v4') || '{}')); } catch (e) { return Object.assign({}, DEFAULTS); } }
 function saveSettings() { try { localStorage.setItem('ncems_ir_v4', JSON.stringify({ workerUrl: gv('s-bin-id') || DEFAULTS.workerUrl })); } catch (e) {} sd('settings-saved'); setTimeout(function () { hd('settings-saved'); }, 2500); }
@@ -651,7 +653,7 @@ function recipients(ag) {
   var bc = onDutyKey();
   var bcs = (bc && bc !== 'unsure') ? [{ k: bc, role: 'On duty today' }] : BCS.map(function (k) { return { k: k, role: 'Battalion Chief' }; });
   if (ag === 'FD13') return [{ k: 'shirley', role: 'Designated infection control officer (DICO)' }, { k: 'andrus', role: 'Division Chief' }].concat(bcs);
-  if (ag === 'VRT') return [{ k: 'boyce', role: 'VRT Incident Commander' }, { k: 'shirley', role: 'Chief' }];
+  if (ag === 'VRT') return [{ k: 'shirley', role: 'Chief' }, { k: 'boyce', role: 'VRT Incident Commander' }].concat(bcs.filter(function (r) { return r.k !== 'boyce'; }));
   return bcs;
 }
 function personRow(r) {
@@ -686,15 +688,15 @@ function renderAgency() {
 }
 function renderNotify() {
   var ag = S.agency, bc = onDutyKey(), list = recipients(ag);
-  var title = { NCEMS: 'Hurt or exposed? Tell the chief on duty now', FD13: 'FD13 reports go to three people', VRT: 'VRT reports go to' }[ag];
+  var title = { NCEMS: 'Hurt or exposed? Tell the chief on duty now', FD13: 'FD13 reports go to three people', VRT: 'VRT reports go to these people' }[ag];
   var line = ag === 'FD13' ? 'All three get an email when you send. Call now if it can’t wait.' : 'They get an email when you send. Call now if it can’t wait.';
-  if (ag !== 'VRT' && (!bc || bc === 'unsure')) line = (bc === 'unsure' ? 'Not sure which BC is on, so all three BCs get it. ' : '') + line;
+  if (!bc || bc === 'unsure') line = (bc === 'unsure' ? 'Not sure which BC is on, so all three BCs get it. ' : '') + line;
   $('nt-title').textContent = title;
   $('nt-line').textContent = line;
   var showList = list;
-  if (ag !== 'VRT' && !bc) showList = list.filter(function (r) { return BCS.indexOf(r.k) < 0; });
+  if (!bc) showList = list.filter(function (r) { return BCS.indexOf(r.k) < 0 || (ag === 'VRT' && r.k === 'boyce'); });
   $('nt-people').innerHTML = showList.map(personRow).join('');
-  var needPick = ag !== 'VRT';
+  var needPick = true;
   show('nt-bcpick', needPick);
   if (needPick) {
     $('bc-chips').innerHTML = BCS.concat(['unsure']).map(function (k) {
